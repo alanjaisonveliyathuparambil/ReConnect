@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReConnect | Customers</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="dashboard">
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-icon">R</div>
+                <h2>ReConnect</h2>
+            </div>
+            <p class="menu-label">MAIN MENU</p>
+            <nav>
+                <a href="/" class="nav-item">Dashboard</a>
+                <a href="/customers" class="nav-item active">Customers</a>
+                <a href="{{ url_for('retention_page') }}" class="nav-item">Retention Intelligence</a>
+            </nav>
+            <div class="sidebar-bottom">
+                <p>Customer Intelligence Platform</p>
+                <span>Version 1.0</span>
+            </div>
+        </aside>
+        <main class="main-content">
+            <header class="topbar">
+                <div>
+                    <p class="welcome">CUSTOMER MANAGEMENT</p>
+                    <h2>Customer Directory</h2>
+                </div>
+                <div class="admin">
+                    <div class="avatar">A</div>
+                    <div>
+                        <strong>Administrator</strong>
+                        <small>Manager</small>
+                    </div>
+                </div>
+            </header>
+            <section class="section">
+                <div class="section-heading">
+                    <h3>All Customers</h3>
+                    <span>{{ total_customers }} customers found</span>
+                </div>
+                <form method="GET" action="/customers" class="filter-form">
+                    <input type="text" name="search" placeholder="Search reference, country or city..." value="{{ search }}">
+                    <select name="status">
+                        <option value="All" {% if selected_status == "All" %}selected{% endif %}>All Statuses</option>
+                        <option value="Active" {% if selected_status == "Active" %}selected{% endif %}>Active</option>
+                        <option value="Cooling Down" {% if selected_status == "Cooling Down" %}selected{% endif %}>Cooling Down</option>
+                        <option value="Inactive" {% if selected_status == "Inactive" %}selected{% endif %}>Inactive</option>
+                        <option value="Dormant" {% if selected_status == "Dormant" %}selected{% endif %}>Dormant</option>
+                        <option value="Unknown" {% if selected_status == "Unknown" %}selected{% endif %}>Unknown</option>
+                    </select>
+                    <button type="submit">Apply Filters</button>
+                    <a href="/customers" class="reset-button">Reset</a>
+                </form>
+                {% if error %}
+                    <p>{{ error }}</p>
+                {% else %}
+                    <div class="table-container">
+                        <table class="customer-table">
+                            <thead>
+                                <tr>
+                                    <th>S.No.</th>
+                                    <th>Reference</th>
+                                    <th>Country</th>
+                                    <th>City</th>
+                                    <th>Last Purchase (Days)</th>
+                                    <th>Total Purchases</th>
+                                    <th>Lifetime Value</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for customer in customers %}
+                                    <tr>
+                                        <td>{{ (page - 1) * 20 + loop.index }}</td>
+                                        <td>
+                                            <a href="{{ url_for('customer_profile', reference=customer.Customer_Reference) }}">
+                                                {{ customer.Customer_Reference }}
+                                            </a>
+                                        </td>                                        
+                                        <td>{{ customer.Country }}</td>
+                                        <td>{{ customer.City }}</td>
+                                        <td>{{ customer.Days_Since_Last_Purchase }}</td>
+                                        <td>{{ customer.Total_Purchases }}</td>
+                                        <td>{{ customer.Lifetime_Value }}</td>
+                                        <td><span class="status-label">{{ customer.Customer_Status }}</span></td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="7">No customers found.</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pagination">
+                        <span>Page {{ page }} of {{ total_pages }}</span>
+                        {% if page > 1 %}
+                            <a href="{{ url_for('customers_page', search=search, status=selected_status, page=page-1) }}">Previous</a>
+                        {% endif %}
+                        {% if page < total_pages %}
+                            <a href="{{ url_for('customers_page', search=search, status=selected_status, page=page+1) }}">Next</a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </section>
+        </main>
+    </div>
+</body>
+</html>

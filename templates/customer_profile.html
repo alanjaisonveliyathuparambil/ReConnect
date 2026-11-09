@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Profile | ReConnect</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="dashboard">
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-icon">R</div>
+                <h2>ReConnect</h2>
+            </div>
+            <p class="menu-label">MAIN MENU</p>
+            <nav>
+                <a href="/" class="nav-item">Dashboard</a>
+                <a href="/customers" class="nav-item active">Customers</a>
+                <a href="{{ url_for('retention_page') }}" class="nav-item">Retention Intelligence</a>
+            </nav>
+            <div class="sidebar-bottom">
+                <p>Customer Intelligence Platform</p>
+                <span>Version 1.0</span>
+            </div>
+        </aside>
+        <main class="main-content">
+            <header class="topbar">
+                <div>
+                    <p class="welcome">CUSTOMER MANAGEMENT</p>
+                    <h2>Individual Customer Profile</h2>
+                </div>
+                <a href="/customers" class="reset-button">Back to Customers</a>
+            </header>
+            <section class="profile-header">
+                <div class="profile-avatar">C</div>
+                <div>
+                    <h2>{{ customer.Customer_Reference }}</h2>
+                    <p>{{ customer.City }}, {{ customer.Country }}</p>
+                    <span class="status-label">{{ customer.Customer_Status }}</span>
+                </div>
+            </section>
+            <section class="section">
+                <div class="section-heading">
+                    <h3>Customer Information</h3>
+                </div>
+                <div class="profile-grid">
+                    <div class="profile-card"><span>Age</span><strong>{{ customer.Age }}</strong></div>
+                    <div class="profile-card"><span>Gender</span><strong>{{ customer.Gender }}</strong></div>
+                    <div class="profile-card"><span>Membership Years</span><strong>{{ customer.Membership_Years }}</strong></div>
+                    <div class="profile-card"><span>Signup Quarter</span><strong>{{ customer.Signup_Quarter }}</strong></div>
+                </div>
+            </section>
+            <section class="section">
+                <div class="section-heading">
+                    <h3>Purchase Behaviour</h3>
+                </div>
+                <div class="profile-grid">
+                    <div class="profile-card"><span>Total Purchases</span><strong>{{ customer.Total_Purchases }}</strong></div>
+                    <div class="profile-card"><span>Average Order Value</span><strong>{{ customer.Average_Order_Value }}</strong></div>
+                    <div class="profile-card"><span>Lifetime Value</span><strong>{{ customer.Lifetime_Value }}</strong></div>
+                    <div class="profile-card"><span>Days Since Last Purchase</span><strong>{{ customer.Days_Since_Last_Purchase }}</strong></div>
+                    <div class="profile-card"><span>Cart Abandonment Rate</span><strong>{{ customer.Cart_Abandonment_Rate }}</strong></div>
+                    <div class="profile-card"><span>Returns Rate</span><strong>{{ customer.Returns_Rate }}</strong></div>
+                    <div class="profile-card"><span>Discount Usage Rate</span><strong>{{ customer.Discount_Usage_Rate }}</strong></div>
+                    <div class="profile-card"><span>Wishlist Items</span><strong>{{ customer.Wishlist_Items }}</strong></div>
+                </div>
+            </section>
+            <section class="section">
+                <div class="section-heading">
+                    <h3>Engagement Behaviour</h3>
+                </div>
+                <div class="profile-grid">
+                    <div class="profile-card"><span>Login Frequency</span><strong>{{ customer.Login_Frequency }}</strong></div>
+                    <div class="profile-card"><span>Average Session Duration</span><strong>{{ customer.Session_Duration_Avg }}</strong></div>
+                    <div class="profile-card"><span>Pages Per Session</span><strong>{{ customer.Pages_Per_Session }}</strong></div>
+                    <div class="profile-card"><span>Email Open Rate</span><strong>{{ customer.Email_Open_Rate }}</strong></div>
+                    <div class="profile-card"><span>Mobile App Usage</span><strong>{{ customer.Mobile_App_Usage }}</strong></div>
+                    <div class="profile-card"><span>Social Media Engagement</span><strong>{{ customer.Social_Media_Engagement_Score }}</strong></div>
+                    <div class="profile-card"><span>Product Reviews</span><strong>{{ customer.Product_Reviews_Written }}</strong></div>
+                    <div class="profile-card"><span>Customer Service Calls</span><strong>{{ customer.Customer_Service_Calls }}</strong></div>
+                </div>
+            </section>
+            <section class="section">
+                <div class="section-heading">
+                    <h3>Recorded Churn Status</h3>
+                </div>
+                <div class="profile-card">
+                    <span>Dataset Churn Label</span>
+                    <strong>{{ customer.Churned if 'Churned' in customer else 'Not available' }}</strong>
+                    <small>0 = Not churned, 1 = Churned</small>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

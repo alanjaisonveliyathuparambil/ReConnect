@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReConnect | Customer Intelligence</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="dashboard">
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-icon">R</div>
+                <h2>ReConnect</h2>
+            </div>
+            <p class="menu-label">MAIN MENU</p>
+            <nav>
+                <a href="#" class="nav-item active">Dashboard</a>
+                <a href="/customers" class="nav-item">Customers</a>
+                <a href="{{ url_for('retention_page') }}" class="nav-item">Retention Intelligence</a>
+            </nav>
+            <div class="sidebar-bottom">
+                <p>Customer Intelligence Platform</p>
+                <span>Version 1.0</span>
+            </div>
+        </aside>
+        <main class="main-content">
+            <header class="topbar">
+                <div>
+                    <p class="welcome">CUSTOMER INTELLIGENCE</p>
+                    <h2>Dashboard Overview</h2>
+                </div>
+                <div class="admin">
+                    <div class="avatar">A</div>
+                    <div>
+                        <strong>Administrator</strong>
+                        <small>Manager</small>
+                    </div>
+                </div>
+            </header>
+            <section class="hero">
+                <div>
+                    <p class="hero-tag">WELCOME TO RECONNECT</p>
+                    <h1>Understand your customers<br>Build lasting relationships</h1>
+                </div>
+                <div class="hero-symbol">R</div>
+            </section>
+            <section class="section">
+                <div class="section-heading">
+                    <h3>Customer Overview</h3>
+                    <span>Live dataset statistics</span>
+                </div>
+                <div class="metrics">
+                    <div class="metric-card">
+                        <p>Total Customers</p>
+                        <h2>{{ total_customers }}</h2>
+                        <small>Records loaded from dataset</small>
+                    </div>
+                    <div class="metric-card">
+                        <p>Active Customers</p>
+                        <h2>{{ summary.active }}</h2>
+                        <small>0-30 days since last purchase</small>
+                    </div>
+                    <div class="metric-card">
+                        <p>At-Risk Customers</p>
+                        <h2>{{ summary.cooling_down + summary.inactive + summary.dormant }}</h2>
+                        <small>Cooling down, inactive and dormant</small>
+                    </div>
+                    <div class="metric-card">
+                        <p>Churned Customers</p>
+                        <h2>{{ churned_customers }}</h2>
+                        <small>Recorded churn cases</small>
+                    </div>
+                </div>
+            </section>
+            <section class="section">
+                <div class="section-heading">
+                    <h3>Customer Activity Classification</h3>
+                    <span>Based on days since last purchase</span>
+                </div>
+                <div class="metrics">
+                    <div class="metric-card">
+                        <p>Cooling Down</p>
+                        <h2>{{ summary.cooling_down }}</h2>
+                    </div>
+                    <div class="metric-card">
+                        <p>Inactive</p>
+                        <h2>{{ summary.inactive }}</h2>
+                    </div>
+                    <div class="metric-card">
+                        <p>Dormant</p>
+                        <h2>{{ summary.dormant }}</h2>
+                    </div>
+                    <div class="metric-card">
+                        <p>Unknown</p>
+                        <h2>{{ summary.unknown }}</h2>
+                    </div>
+                </div>
+            </section>
+            <section class="section">
+                <div class="section-heading">
+                    <h3>Customer Data Preview</h3>
+                    <span>First 8 records</span>
+                </div>
+                {% if error %}
+                    <p>{{ error }}</p>
+                {% elif customer_preview %}
+                    <div style="overflow-x: auto;">
+                        <table border="1" cellpadding="10">
+                            <thead>
+                                <tr>
+                                    {% for column in customer_preview[0].keys() %}
+                                        <th>{{ column }}</th>
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for customer in customer_preview %}
+                                    <tr>
+                                        {% for value in customer.values() %}
+                                            <td>{{ value }}</td>
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}
+            </section>
+            <footer>
+                ReConnect © 2026 | Customer Intelligence & Retention Platform
+            </footer>
+        </main>
+    </div>
+</body>
+</html>

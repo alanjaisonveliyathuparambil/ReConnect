@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retention Intelligence | ReConnect</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="dashboard">
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-icon">R</div>
+                <h2>ReConnect</h2>
+            </div>
+            <p class="menu-label">MAIN MENU</p>
+            <nav>
+                <a href="/" class="nav-item">Dashboard</a>
+                <a href="/customers" class="nav-item">Customers</a>
+                <a href="/retention" class="nav-item active">Retention Intelligence</a>
+            </nav>
+            <div class="sidebar-bottom">
+                <p>Customer Intelligence Platform</p>
+                <span>Version 1.0</span>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="topbar">
+                <div>
+                    <p class="welcome">CUSTOMER INTELLIGENCE</p>
+                    <h2>Retention Intelligence</h2>
+                </div>
+                <div class="admin">
+                    <div class="avatar">A</div>
+                    <div>
+                        <strong>Administrator</strong>
+                        <small>Manager</small>
+                    </div>
+                </div>
+            </header>
+
+            <section class="section">
+                <div class="section-heading">
+                    <h3>Customer Retention Overview</h3>
+                    <span>Engagement and churn risk analysis</span>
+                </div>
+
+                {% if error %}
+                    <p>{{ error }}</p>
+                {% else %}
+                    <div class="retention-cards">
+                        <div class="retention-card">
+                            <p>Total Customers</p>
+                            <h2>{{ total_customers }}</h2>
+                        </div>
+                        <div class="retention-card">
+                            <p>Customers Needing Attention</p>
+                            <h2>{{ total_at_risk }}</h2>
+                        </div>
+                        <div class="retention-card">
+                            <p>High Priority Customers</p>
+                            <h2>{{ high_priority }}</h2>
+                        </div>
+                    </div>
+
+                    <a class="export-button" href="/retention/export">Download CSV Report</a>
+
+                    <div class="section-heading">
+                        <h3>Customer Retention Analysis</h3>
+                        <span>Priority-wise customer assessment</span>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="customer-table">
+                            <thead>
+                                <tr>
+                                    <th>Reference</th>
+                                    <th>Location</th>
+                                    <th>Churn Probability</th>
+                                    <th>Risk Level</th>
+                                    <th>Engagement</th>
+                                    <th>Indicators</th>
+                                    <th>Recommendations</th>
+                                    <th>Priority Score</th>
+                                    <th>Priority</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for customer in customers %}
+                                <tr>
+                                    <td>{{ customer.Customer_Reference }}</td>
+                                    <td>{{ customer.City }}, {{ customer.Country }}</td>
+                                    <td>{{ customer.Churn_Probability }}%</td>
+                                    <td class="{{ customer.Risk_Level|lower }}">{{ customer.Risk_Level }}</td>
+                                    <td>{{ customer.Engagement_Level }}</td>
+                                    <td class="indicator-list">
+                                        {% for indicator in customer.Engagement_Indicators %}
+                                            {{ indicator }}{% if not loop.last %}<br>{% endif %}
+                                        {% else %}
+                                            No warning signs
+                                        {% endfor %}
+                                    </td>
+                                    <td class="recommendation-list">
+                                        {% for recommendation in customer.Retention_Recommendations %}
+                                            {{ recommendation }}{% if not loop.last %}<br>{% endif %}
+                                        {% endfor %}
+                                    </td>
+                                    <td>{{ customer.Priority_Score }}</td>
+                                    <td class="{{ customer.Priority_Level|lower }}">{{ customer.Priority_Level }}</td>
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    <td colspan="9">No customer records available.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <p style="color: #718096; margin-top: 15px;">
+                        Showing the top {{ customers|length }} customers based on retention priority.
+                    </p>
+                {% endif %}
+            </section>
+        </main>
+    </div>
+</body>
+</html>
